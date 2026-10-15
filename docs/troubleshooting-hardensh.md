@@ -25,5 +25,11 @@ cat > docs/troubleshooting.md <<'DOC_END'
 - Key part: my WSL had no private key (`~/.ssh` held only known_hosts). I generated a new ed25519 key in WSL and added its public key to the server's authorized_keys.
 - Lesson: check which machine each command runs on (the prompt shows it).
 
-DOC_END
 
+## Status
+- [x] VPS created and hardened
+- [x] DNS pointing to the VPS
+- [x] Service running under systemd
+- [ ] nginx reverse proxy
+- [ ] HTTPS with Let's Encrypt
+- [ ] Portfolio site live at vedrion.com
