@@ -1,0 +1,15 @@
+[Unit]
+Description=Vedrion health service
+After=network.target
+
+[Service]
+User=vedrion
+WorkingDirectory=/opt/vedrion
+ExecStart=/usr/bin/python3 /opt/vedrion/app.py
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
+
