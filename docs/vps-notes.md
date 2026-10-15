@@ -6,4 +6,5 @@
 - Instance type: t3.micro
 - Size: <vCPU / RAM / disk>
 - Network: Elastic IP, security group allowing 22 (my IP), 80 and 443
-- Login: ed-25519
+- Login: SSH key only, root login and password login disabled
+- Admin user: nandan (sudo), created by scripts/harden.sh
