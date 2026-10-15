@@ -1,5 +1,6 @@
+cat > scripts/harden.sh <<'SCRIPT_END'
 #!/usr/bin/env bash
-# Usage (as root): bash harden.sh <new-username>
+# Usage (as root): sudo bash harden.sh <new-username>
 set -euo pipefail
 
 NEW_USER="${1:?usage: bash harden.sh <new-username>}"
@@ -12,13 +13,15 @@ fi
 apt-get update
 apt-get -y upgrade
 
-# 1. Create a normal admin user
-adduser --disabled-password --gecos "" "$NEW_USER"
+# 1. Create a normal admin user (only if it does not exist yet)
+id -u "$NEW_USER" >/dev/null 2>&1 || adduser --disabled-password --gecos "" "$NEW_USER"
 usermod -aG sudo "$NEW_USER"
 echo "$NEW_USER ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/90-$NEW_USER"
 chmod 440 "/etc/sudoers.d/90-$NEW_USER"
 
-# 2. Give the new user your SSH key
+# 2. Give the new user the SSH key.
+# On AWS Ubuntu, root's authorized_keys has a command= prefix that blocks
+# logins, so copy from the ubuntu user first.
 mkdir -p "/home/$NEW_USER/.ssh"
 if [ -f /home/ubuntu/.ssh/authorized_keys ]; then
   cp /home/ubuntu/.ssh/authorized_keys "/home/$NEW_USER/.ssh/authorized_keys"
@@ -38,12 +41,14 @@ ufw allow 443/tcp
 ufw --force enable
 
 # 4. SSH: key login only, no root login
-# The "00-" name makes this file win over other config files.
 cat > /etc/ssh/sshd_config.d/00-hardening.conf <<'EOF'
 PasswordAuthentication no
 PermitRootLogin no
 EOF
+mkdir -p /run/sshd
 sshd -t
 systemctl restart ssh
 
 echo "Done. Test login as $NEW_USER from a NEW terminal before closing this one."
+SCRIPT_END
+
