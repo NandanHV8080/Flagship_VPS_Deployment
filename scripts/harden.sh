@@ -20,7 +20,11 @@ chmod 440 "/etc/sudoers.d/90-$NEW_USER"
 
 # 2. Give the new user your SSH key
 mkdir -p "/home/$NEW_USER/.ssh"
-cp /root/.ssh/authorized_keys "/home/$NEW_USER/.ssh/authorized_keys"
+if [ -f /home/ubuntu/.ssh/authorized_keys ]; then
+  cp /home/ubuntu/.ssh/authorized_keys "/home/$NEW_USER/.ssh/authorized_keys"
+else
+  cp /root/.ssh/authorized_keys "/home/$NEW_USER/.ssh/authorized_keys"
+fi
 chown -R "$NEW_USER:$NEW_USER" "/home/$NEW_USER/.ssh"
 chmod 700 "/home/$NEW_USER/.ssh"
 chmod 600 "/home/$NEW_USER/.ssh/authorized_keys"
