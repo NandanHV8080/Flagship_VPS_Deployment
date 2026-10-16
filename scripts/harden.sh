@@ -1,6 +1,4 @@
-cat > scripts/harden.sh <<'SCRIPT_END'
-#!/usr/bin/env bash
-# Usage (as root): sudo bash harden.sh <new-username>
+
 set -euo pipefail
 
 NEW_USER="${1:?usage: bash harden.sh <new-username>}"
@@ -50,5 +48,4 @@ sshd -t
 systemctl restart ssh
 
 echo "Done. Test login as $NEW_USER from a NEW terminal before closing this one."
-SCRIPT_END
 
