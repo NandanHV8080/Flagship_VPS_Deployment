@@ -20,3 +20,9 @@ Certificates are in `/etc/letsencrypt/live/vedrion.com/`.
 ## Applying a config change
     cd ~/Flagship_VPS_Deployment && git pull && bash scripts/install-nginx.sh
 
+## UPDATE
+      ## Renewal check
+  - `sudo certbot renew --dry-run` succeeded.
+  - The `certbot.timer` systemd timer checks for renewal twice a day; the deploy hook reloads nginx after a renewal.
+
+
