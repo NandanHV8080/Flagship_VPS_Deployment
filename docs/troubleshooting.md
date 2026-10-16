@@ -25,5 +25,15 @@
 - Key part: my WSL had no private key (`~/.ssh` held only known_hosts). I generated a new ed25519 key in WSL and added its public key to the server's authorized_keys.
 - Lesson: check which machine each command runs on (the prompt shows it).
 
-### 4. Service restart test
-- [Will fill in afyer performing kill test below to see how long systemd took to restart the service.]
+## Day 2 (16 Oct 2026)
+
+### nginx and HTTPS
+- Used certbot's `certonly --nginx` so the nginx config stays in git and certbot only issues the certificate.
+- Ubuntu 24.04 ships nginx 1.24, so HTTP/2 is enabled with `listen 443 ssl http2;` (the separate `http2 on;` directive needs nginx 1.25.1 or newer).
+- [Add any error you hit, what caused it, and how you fixed it.]
+
+### Checks that proved it works
+- `curl -I http://vedrion.com` returns 301 to https://vedrion.com
+- `curl -I https://www.vedrion.com` returns 301 to https://vedrion.com
+- `curl -s https://vedrion.com/api/health` returns the JSON from the systemd service
+- `sudo certbot renew --dry-run` succeeded
