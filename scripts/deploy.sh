@@ -12,6 +12,13 @@ sudo mkdir -p /opt/vedrion
 sudo cp "$REPO_DIR/app/app.py" /opt/vedrion/app.py
 sudo chown -R vedrion:vedrion /opt/vedrion
 
+# Publish the static site
+sudo mkdir -p /var/www/vedrion
+sudo cp -r "$REPO_DIR/site/." /var/www/vedrion/
+sudo chown -R root:root /var/www/vedrion
+sudo find /var/www/vedrion -type d -exec chmod 755 {} \;
+sudo find /var/www/vedrion -type f -exec chmod 644 {} \;
+
 # Install and start the service
 sudo cp "$REPO_DIR/systemd/vedrion.service" /etc/systemd/system/vedrion.service
 sudo systemctl daemon-reload
